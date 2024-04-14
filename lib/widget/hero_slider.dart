@@ -1,10 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:zeal/global/image_url_hero.dart';
+import 'package:zeal/controllers/tab_controller.dart';
 import 'package:zeal/global/pallet.dart';
+import 'package:get/get.dart';
 
 class HeroSlider extends StatefulWidget {
-  const HeroSlider({super.key});
+  HeroSlider({super.key});
 
   @override
   State<HeroSlider> createState() => _HeroSliderState();
@@ -13,16 +14,17 @@ class HeroSlider extends StatefulWidget {
 class _HeroSliderState extends State<HeroSlider> {
   int _activeIndex = 0;
   final carouselController = CarouselController();
+  final tabControllre = Get.find<CustomTabController>();
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         CarouselSlider.builder(
           carouselController: carouselController,
-          itemCount: urlImages.length,
+          itemCount: tabControllre.urlImages.length,
           itemBuilder: (context, index, realIndex) {
             return ImageSlider(
-              image: urlImages[index],
+              image: tabControllre.urlImages[index],
             );
           },
           options: CarouselOptions(
@@ -50,10 +52,10 @@ class _HeroSliderState extends State<HeroSlider> {
           bottom: 0,
           child: InkWell(
             onTap: () {
-              if (_activeIndex == 0){
-                _activeIndex = urlImages.length - 1;
+              if (_activeIndex == 0) {
+                _activeIndex = tabControllre.urlImages.length - 1;
               }
-                _activeIndex--;
+              _activeIndex--;
               carouselController.previousPage();
             },
             child: Container(
@@ -77,7 +79,7 @@ class _HeroSliderState extends State<HeroSlider> {
           bottom: 0,
           child: InkWell(
             onTap: () {
-              if (_activeIndex == urlImages.length - 1){
+              if (_activeIndex == tabControllre.urlImages.length - 1) {
                 _activeIndex = 0;
               }
               _activeIndex++;
@@ -127,17 +129,17 @@ class ImageSlider extends StatelessWidget {
 
 class SliderIndicator extends StatelessWidget {
   final int activeIndex;
-  const SliderIndicator({
+  SliderIndicator({
     super.key,
     required this.activeIndex,
   });
-
+  final tabControllre = Get.find<CustomTabController>();
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
-        urlImages.length,
+        tabControllre.urlImages.length,
         (index) => AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           height: 8,
